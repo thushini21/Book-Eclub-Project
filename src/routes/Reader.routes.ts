@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// POST add new reader (වැරදි තියෙන්නෙ මෙතනයි — router, async වෙනුවට router.post(...) වෙන්න ඕන)
+// POST add new reader
 router.post('/', async (req, res) => {
     const reader = new Reader({
         name: req.body.name,
