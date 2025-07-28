@@ -22,8 +22,11 @@ export const addUser = async (
     next: NextFunction
 ): Promise<any> => {
     try {
+        console.log("Request Body:", req.body); // Log request body to verify data received
+
         const libraryUser = new LibraryMemberUserModel(req.body);
 
+        // Check if user already exists
         const existingUser = await LibraryMemberUserModel.findOne({
             email: libraryUser.email,
         });
@@ -40,8 +43,17 @@ export const addUser = async (
             user: savedUser,
             status: 201,
         });
-    } catch (error) {
-        console.error("Error adding user:", error);
+    } catch (error: any) {
+        console.error("Error adding user:", error.message || error);
+
+        if (error.name === "ValidationError") {
+            // Mongoose validation error
+            return res.status(400).json({
+                message: "Validation error: " + error.message,
+                status: 400,
+            });
+        }
+
         next(error);
         return res.status(500).json({
             message: "Internal server error",
@@ -368,3 +380,4 @@ export const getUser = async (
         });
     }
 };
+
