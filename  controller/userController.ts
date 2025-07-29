@@ -15,7 +15,7 @@ interface VerifyCredentials {
     verificationCode: number;
 }
 
-// Add a library member user
+// ad library member user
 export const addUser = async (
     req: Request,
     res: Response,
@@ -26,7 +26,7 @@ export const addUser = async (
 
         const libraryUser = new LibraryMemberUserModel(req.body);
 
-        // Check if user already exists
+        // Check user already exists
         const existingUser = await LibraryMemberUserModel.findOne({
             email: libraryUser.email,
         });
@@ -47,7 +47,6 @@ export const addUser = async (
         console.error("Error adding user:", error.message || error);
 
         if (error.name === "ValidationError") {
-            // Mongoose validation error
             return res.status(400).json({
                 message: "Validation error: " + error.message,
                 status: 400,
@@ -62,7 +61,7 @@ export const addUser = async (
     }
 };
 
-// Update library member user
+// Update library member
 export const updateUser = async (
     req: Request,
     res: Response,
@@ -79,7 +78,6 @@ export const updateUser = async (
             });
         }
 
-        // Fix: await the update call
         const updatedUser = await LibraryMemberUserModel.findByIdAndUpdate(
             existingUser._id,
             req.body,
@@ -276,7 +274,7 @@ export const verifyCode = async (
         }
 
         user.isVerified = true;
-        user.verificationCode = 123456; // Reset or clear code
+        user.verificationCode = 123456;
         await user.save();
 
         return res.status(200).json({
@@ -310,7 +308,6 @@ export const loginUser = async (
             });
         }
 
-        // You should hash passwords in production!
         if (user.password !== password) {
             return res.status(401).json({
                 message: "Invalid credentials",
